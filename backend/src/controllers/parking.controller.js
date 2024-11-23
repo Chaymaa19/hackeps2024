@@ -50,6 +50,8 @@ export const getParkings = async (req, res) => {
                 doc.id,
                 doc.data().name,
                 doc.data().description,
+                doc.data().address,
+                doc.data().coordinates,
                 doc.data().owner,
                 doc.data().spots,
             );
@@ -99,6 +101,8 @@ export const getParkingByOwner = async (req, res) => {
                     doc.id,
                     doc.data().name,
                     doc.data().description,
+                    doc.data().address,
+                    doc.data().coordinates,
                     doc.data().owner,
                     doc.data().spots,
                 );

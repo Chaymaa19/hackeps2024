@@ -5,7 +5,7 @@ import { getParkings, getParking, getParkingByOwner, createParking, updateParkin
 const router = Router()
 
 /**
- * When one of the allergies endpoints is reached, these functions trigger the corresponding function
+ * When one of the parkings endpoints is reached, these functions trigger the corresponding function
  */
 router.get('/parkings', getParkings)
 
