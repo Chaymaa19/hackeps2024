@@ -18,7 +18,7 @@ export const getOwners = async (req, res) => {
         } else {
             owners.forEach((doc) => {
             const owner = new Owner(
-                doc.id,
+                doc.data().uid,
                 doc.data().name,
             );
             ownersArray.push(owner);

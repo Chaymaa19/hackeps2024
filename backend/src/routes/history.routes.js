@@ -1,18 +1,18 @@
 import {Router} from 'express'
-import { getHistory, getHistoryById, createHistory, updateHistory, deleteHistory } from '../controllers/history.controller.js'
+import { getHistories, getHistory, createHistory, updateHistory, deleteHistory } from '../controllers/history.controller.js'
 
 const router = Router()
 
 
-router.get('/history', getHistory)
+router.get('/histories', getHistories)
 
-router.get('/history/:id', getHistoryById)
+router.get('/histories/:id', getHistory)
 
-router.post('/history', createHistory)
+router.post('/histories', createHistory)
 
-router.patch('/history/:id', updateHistory)
+router.patch('/histories/:id', updateHistory)
 
-router.delete('/history/:id', deleteHistory)
+router.delete('/histories/:id', deleteHistory)
 
 
 export default router
