@@ -11,26 +11,12 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key, this.defaultLanguageCode = 'en'});
-
-  final String defaultLanguageCode;
-
-  @override
-  State<MyApp> createState() => MyAppState();
-}
-
-class MyAppState extends State<MyApp> {
-  late Locale _locale;
-  Locale get locale => _locale;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(routerConfig: ApplicationRouter().router);
   }
 }
+
