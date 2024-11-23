@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Parking {
+  String id;
   String name;
   String description;
   String address;
@@ -10,6 +11,7 @@ class Parking {
   String mapsUrl;
 
   Parking({
+    required this.id,
     required this.name,
     required this.description,
     required this.address,
@@ -35,6 +37,7 @@ class Parking {
     int filledCount = spots.where((spot) => spot['filled'] == true).length;
 
     return Parking(
+        id: doc.id,
         name: name,
         description: description,
         address: address,

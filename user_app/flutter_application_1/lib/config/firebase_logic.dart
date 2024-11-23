@@ -6,6 +6,10 @@ FirebaseService firestoreService = FirebaseService();
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  FirebaseFirestore getFirestore() {
+    return _firestore;
+  }
+
   Future<List<Parking>> getParkings() async {
     try {
       // Fetch all documents in the 'parkings' collection

@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
 import 'package:flutter_application_1/config/firebase_logic.dart';
 import 'package:flutter_application_1/config/models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Marker> _markers = [];
+  Map<String, bool> favorites = {};
   // Function to fetch parking data and generate markers
   Future<void> _loadParkingMarkers() async {
     List<Parking> parkings = await firestoreService.getParkings();
@@ -34,6 +36,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _toggleFavorite(String parkingId, bool isFavorite) {
+    setState(() {
+      favorites[parkingId] = isFavorite;
+    });
+    // TODO: change firestore user's favorites list 
+  }
+
   @override
   void initState() {
     super.initState();
@@ -45,40 +54,45 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Stack(
         children: [
-          FlutterMap(
-            options: MapOptions(
-              initialCenter:
-                  const LatLng(41.61213179151308, 0.6221237768064511),
-              initialZoom: 15,
-              cameraConstraint: CameraConstraint.contain(
-                bounds: LatLngBounds(
-                  const LatLng(-90, -180),
-                  const LatLng(90, 180),
+          StreamBuilder<QuerySnapshot>(
+            // Assume you're listening to a Firestore collection `parkings`
+            stream: firestoreService
+                .getFirestore()
+                .collection('parkings')
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              // Extract parking data from snapshot
+              var parkings = snapshot.data!.docs.map((doc) {
+                var data = doc.data() as Map<String, dynamic>;
+                return Parking.fromFirestore(doc);
+              }).toList();
+
+              // Build markers from updated parking data
+              List<Marker> markers = parkings.map((parking) {
+                return buildPin(
+                  LatLng(parking.coordinates.latitude,
+                      parking.coordinates.longitude),
+                  parking,
+                  context,
+                );
+              }).toList();
+
+              return FlutterMap(
+                options: MapOptions(
+                  initialCenter:
+                      const LatLng(41.61213179151308, 0.6221237768064511),
+                  initialZoom: 15,
                 ),
-              ),
-            ),
-            children: [
-              openStreetMapTileLayer,
-              RichAttributionWidget(
-                popupInitialDisplayDuration: const Duration(seconds: 5),
-                animationConfig: const ScaleRAWA(),
-                showFlutterMapAttribution: false,
-                attributions: [
-                  TextSourceAttribution(
-                    'OpenStreetMap contributors',
-                    onTap: () async => launchUrl(
-                      Uri.parse('https://openstreetmap.org/copyright'),
-                    ),
-                  ),
-                  const TextSourceAttribution(
-                    'This attribution is the same throughout this app, except '
-                    'where otherwise specified',
-                    prependCopyright: false,
-                  ),
+                children: [
+                  openStreetMapTileLayer,
+                  MarkerLayer(markers: markers),
                 ],
-              ),
-              MarkerLayer(markers: _markers)
-            ],
+              );
+            },
           ),
         ],
       ),
@@ -94,6 +108,7 @@ class _HomePageState extends State<HomePage> {
       );
 
   Marker buildPin(LatLng point, Parking parking, BuildContext context) {
+    bool isFavorite = favorites[parking.id] ?? false;
     return Marker(
       point: point,
       width: 60,
@@ -104,69 +119,106 @@ class _HomePageState extends State<HomePage> {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(
-                  parking.name,
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight:
-                          FontWeight.bold), // Larger and bold parking name
-                ),
-                content: SingleChildScrollView(
-                  // Make content scrollable
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Display an image
-                      Image.network('assets/images/parking_logo.png',
-                          width: 100, height: 100),
-                      SizedBox(height: 10),
-                      // Parking details
-                      Text(
-                        parking.address,
-                        style: TextStyle(fontSize: 16),
+              // Return StreamBuilder inside the AlertDialog
+              return StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('parkings')
+                    .doc(parking
+                        .id) // Assuming 'id' is the Firestore document ID
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  // Extract the parking details from the updated snapshot
+                  var data = snapshot.data!.data() as Map<String, dynamic>;
+                  Parking updatedParking =
+                      Parking.fromFirestore(snapshot.data!);
+
+                  return AlertDialog(
+                    title: StatefulBuilder(
+                      builder: (context, setState) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                updatedParking.name,
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // Toggle favorite state locally and update parent
+                                setState(() {
+                                  isFavorite = !isFavorite;
+                                });
+                                _toggleFavorite(parking.id, isFavorite);
+                              },
+                              child: Icon(
+                                Icons.star,
+                                color: isFavorite ? Colors.yellow : Colors.grey,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.network('assets/images/parking_logo.png',
+                              width: 100, height: 100),
+                          SizedBox(height: 10),
+                          Text(updatedParking.address,
+                              style: TextStyle(fontSize: 16)),
+                          SizedBox(height: 10),
+                          InkWell(
+                            child: Text(
+                              updatedParking.mapsUrl,
+                              style:
+                                  TextStyle(color: Colors.blue, fontSize: 16),
+                            ),
+                            onTap: () async {
+                              if (await canLaunch(updatedParking.mapsUrl)) {
+                                await launch(updatedParking.mapsUrl);
+                              } else {
+                                throw 'Could not launch ${updatedParking.mapsUrl}';
+                              }
+                            },
+                          ),
+                          SizedBox(height: 20),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Filled: ${updatedParking.filledCount}/${updatedParking.maxSpots}',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: _getOccupancyColor(
+                                    updatedParking.filledCount,
+                                    updatedParking.maxSpots),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                        ],
                       ),
-                      SizedBox(height: 10),
-                      // Make the maps URL clickable
-                      InkWell(
-                        child: Text(
-                          parking.mapsUrl,
-                          style: TextStyle(color: Colors.blue, fontSize: 16),
-                        ),
-                        onTap: () async {
-                          // Open the URL in a web browser
-                          if (await canLaunch(parking.mapsUrl)) {
-                            await launch(parking.mapsUrl);
-                          } else {
-                            throw 'Could not launch ${parking.mapsUrl}';
-                          }
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Close'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
                         },
                       ),
-                      SizedBox(height: 20),
-                      // Make "Filled" bigger and center it
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Filled: ${parking.filledCount}/${parking.maxSpots}',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: _getOccupancyColor(parking.filledCount, parking.maxSpots)
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20), // More space between sections
                     ],
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Close'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
+                  );
+                },
               );
             },
           );
