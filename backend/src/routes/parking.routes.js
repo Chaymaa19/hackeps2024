@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { getParkings, getParking, getParkingByOwner, createParking, updateParking, deleteParking } from '../controllers/parking.controller.js'
+import { getParkings, getParking, getParkingByOwner, createParking, updateParking, toggleSpotStatus, deleteParking } from '../controllers/parking.controller.js'
 
 
 const router = Router()
@@ -17,6 +17,8 @@ router.get('/parkings/owner/:owner', getParkingByOwner)
 router.post('/parkings', createParking)
 
 router.patch('/parkings/:id', updateParking)
+
+router.patch('/parkings/:id/spot/:spotId', toggleSpotStatus);
 
 router.delete('/parkings/:id', deleteParking)
 

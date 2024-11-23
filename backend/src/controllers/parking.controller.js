@@ -5,7 +5,7 @@ import {
   collection,
   doc,
   addDoc,
-  getDoc,
+  getDoc, 
   getDocs,
   updateDoc,
   deleteDoc,
@@ -53,6 +53,7 @@ export const getParkings = async (req, res) => {
                 doc.data().address,
                 doc.data().coordinates,
                 doc.data().owner,
+                doc.data().maxSpots,
                 doc.data().spots,
             );
             parkingsArray.push(parking);
@@ -104,6 +105,7 @@ export const getParkingByOwner = async (req, res) => {
                     doc.data().address,
                     doc.data().coordinates,
                     doc.data().owner,
+                    doc.data().maxSpots,
                     doc.data().spots,
                 );
                 parkingsArray.push(parking);
@@ -151,3 +153,42 @@ export const deleteParking = async (req, res) => {
         res.status(400).send(error.message);
     }
 }
+
+export const toggleSpotStatus = async (req, res) => {
+    try {
+        const parkingId = req.params.id; // Parking document ID
+        const spotId = parseInt(req.params.spotId); // Spot ID (parsed as integer)
+      
+        // Get the parking document
+        const parkingRef = doc(db, 'parkings', parkingId);
+        const parkingSnapshot = await getDoc(parkingRef);
+
+        if (!parkingSnapshot.exists()) {
+            return res.status(404).send('Parking not found');
+        }
+
+        // Retrieve current spots array
+        const parkingData = parkingSnapshot.data();
+        const spots = parkingData.spots;
+
+        // Find the spot by its ID
+        const spotIndex = spots.findIndex(spot => spot.id === spotId);
+        if (spotIndex === -1) {
+            return res.status(404).send('Spot not found');
+        }
+
+        // Toggle the filled status
+        spots[spotIndex].filled = !spots[spotIndex].filled;
+
+        // Update the document in Firestore
+        await updateDoc(parkingRef, { spots });
+
+        res.status(200).send({
+            message: 'Spot status updated successfully',
+            spot: spots[spotIndex]
+        });
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+};
+  
