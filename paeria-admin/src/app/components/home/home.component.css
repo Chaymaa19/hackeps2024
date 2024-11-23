@@ -1,0 +1,165 @@
+/* Exterior Container */
+.parking-container {
+    padding: 0 20px; /* Add padding to the left and right of the entire container */
+    max-width: 1200px; /* Optional: Limit the maximum width */
+    margin: 0 auto; /* Center the container horizontally */
+  }
+  
+  /* Parking Item Styling */
+  .parking-item {
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  /* Parking Header */
+  .parking-header {
+    background-color: #007bff; /* Bootstrap primary blue */
+    color: white;
+    padding: 12px;
+    cursor: pointer;
+    display: grid; /* Use grid layout for alignment */
+    grid-template-columns: 2fr 2fr 2fr 2fr; /* Define equal width for each column */
+    gap: 10px; /* Add spacing between columns */
+    align-items: center; /* Align items vertically */
+  }
+  
+  .parking-header h3,
+  .parking-header p {
+    margin: 0;
+    word-wrap: break-word; /* Prevent text overflow */
+  }
+  
+  /* Owner Name and Logo */
+  .parking-header p.owner {
+    display: flex;
+    align-items: center; /* Align text and logo vertically */
+    gap: 5px; /* Add spacing between text and logo */
+  }
+  
+  .owner-logo {
+    max-width: 50px; /* Adjusted logo size for uniformity */
+    height: auto;
+    display: block;
+  }
+  
+  /* Parking Details */
+  .parking-details {
+    display: block;
+    width: auto;
+    padding: 12px;
+    background-color: #f9f9f9; /* Light grey background for details */
+    border-top: 1px solid #ddd;
+  }
+  
+  .parking-details-content {
+    word-wrap: break-word; /* Prevent overflow of long words */
+  }
+  
+  /* Parking Spots Grid */
+  .parking-spots-container {
+    margin-top: 20px;
+  }
+  
+  .spots-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr); /* Limit to 10 boxes per row */
+    gap: 5px; /* Small spacing between boxes */
+    justify-items: center; /* Center-align boxes within the grid */
+  }
+  
+  .spot-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px; /* Consistent box size */
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f4f4f4; /* Default neutral color */
+    cursor: default;
+    user-select: none;
+  }
+  
+  .spot-box.filled {
+    background-color: red; /* Red for filled spots */
+  }
+  
+  .spot-box.empty {
+    background-color: green; /* Green for empty spots */
+  }
+  
+  .spot-box[title] {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .spot-box[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%; /* Above the box */
+    left: 50%;
+    transform: translateX(-50%);
+    background: black;
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  
+  /* Charts */
+  canvas {
+    width: 100% !important;
+    height: 300px !important; /* Adjust based on your layout */
+  }
+  
+  /* Logout Button */
+  .logout-button {
+    position: fixed; /* Fix it to the bottom */
+    right: 20px; /* Right margin */
+    bottom: 20px; /* Bottom margin */
+    background-color: red; /* Red background */
+    color: white; /* White text */
+    padding: 15px 30px; /* Padding for a bigger button */
+    font-size: 18px; /* Larger font size */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+  }
+  
+  .logout-button:hover {
+    background-color: darkred; /* Darker red on hover */
+  }
+  
+  /* Export Button */
+  .export-button-container {
+    position: fixed; /* Fix it to the bottom */
+    left: 20px; /* Left margin */
+    bottom: 20px; /* Bottom margin */
+    text-align: center;
+  }
+  
+  .export-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    border: none;
+    padding: 12px 20px; /* Padding for the button */
+    font-size: 16px; /* Font size */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover */
+  }
+  
+  .export-button:hover {
+    background-color: #45a049; /* Darker green */
+  }
+  
+  /* Chart Container Padding */
+  .chart-container {
+    padding-top: 20px; /* Add padding to the top of each chart */
+  }
+  

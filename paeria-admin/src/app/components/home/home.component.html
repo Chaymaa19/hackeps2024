@@ -1,0 +1,55 @@
+<a (click)="logout()" class="logout-button">LOGOUT</a>
+
+<div class="parking-container">
+  <div *ngFor="let parking of parkings" class="parking-item">
+    <div class="parking-header" (click)="toggleDetails(parking)">
+      <h3>{{ parking.name }}</h3>
+      <p><strong>Location:</strong> {{ parking.address }}</p>
+      <p><strong>Owner:</strong> 
+        {{ parking.owner }}
+        <!-- Display the logo next to the owner name -->
+        <img *ngIf="parking.owner === 'Paeria'" src="assets/images/paeria.png" alt="Paeria Logo" class="owner-logo">
+        <img *ngIf="parking.owner === 'Carrefour'" src="assets/images/carrefour.svg" alt="Carrefour Logo" class="owner-logo">
+      </p>
+      <p><strong>Coordinates:</strong> 
+        {{ parking.coordinates?.latitude | number:'1.4-4' }}, 
+        {{ parking.coordinates?.longitude | number:'1.4-4' }}
+      </p>
+    </div>
+
+    <!-- Only show the details for the selected parking -->
+    <div *ngIf="isParkingSelected(parking)" class="parking-spots-container">
+      <h4>Parking Spots</h4>
+      <div class="spots-grid">
+        <div *ngFor="let spot of parking.spots" class="spot-box" [ngClass]="{ 'filled': spot.filled, 'empty': !spot.filled }" [title]="spot.filled ? 'Plate: ' + spot.plate : ''">
+          {{ spot.id }}
+        </div>
+      </div>
+
+      <!-- Donut Chart - Filled vs Empty spots -->
+      <div class="chart-container">
+        <h3>Percentage of Filled vs Empty Spots</h3>
+        <canvas baseChart
+                [data]="pieChartData"
+                [options]="chartOptions"
+                chartType="doughnut">
+        </canvas>
+      </div>
+
+      <!-- Bar Chart - Average Time Spent Each Day of the Week -->
+      <div class="chart-container">
+        <h3>Average Time Spent Each Day of the Week</h3>
+        <canvas baseChart
+                [data]="barChartData"
+                [options]="chartOptions"
+                chartType="bar">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Export CSV Button Container -->
+<div class="export-button-container">
+  <button class="export-button" (click)="exportCSV()">Export Data to CSV</button>
+</div>

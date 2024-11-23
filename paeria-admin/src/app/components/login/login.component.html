@@ -1,1 +1,30 @@
-<p>login works!</p>
+<div class="wrapper" style="padding-top: 10px;">
+  <div class="body">
+    <img class="logo" src="assets/images/paeria.png" alt="Login">
+    <h1>Login</h1>
+    <form (ngSubmit)="login('','', false)" [formGroup]="loginUser">
+      <div class="form-floating mb-3">
+        <input type="email" formControlName="email" class="form-control" placeholder="name@example.com">
+        <label>Email</label>
+        <span *ngIf="loginUser.get('email')?.hasError('required')  && loginUser.get('email')?.touched"
+          class="text-danger errorLabel">
+          <strong>Mail</strong> is required
+        </span>
+        <span *ngIf="loginUser.get('email')?.hasError('email')  && loginUser.get('email')?.touched"
+          class="text-danger errorLabel">
+          Mail must be <strong>valid</strong>
+        </span>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" formControlName="password" class="form-control" placeholder="Password">
+        <label>Password</label>
+        <span *ngIf="loginUser.get('password')?.hasError('required')  && loginUser.get('password')?.touched"
+          class="text-danger errorLabel">
+          <strong>Password</strong> is required
+        </span>
+      </div>
+      <div class="d-grid gap-2">
+        <button class="btn btn-primary btn-lg" type="submit" [disabled]="loginUser.invalid">Login</button>
+      </div>
+    </form>
+</div>

@@ -1,1 +1,54 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'ngx-toastr/toastr';
+
+
+.bg-pink {
+    background-color: #e9f4df !important;
+}
+
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+}
+
+#header {
+    background-color: #2D6F28;
+    width: 100%;
+    padding: 15px;
+    column-count: 2;
+}
+
+#header img {
+    width: 40px;
+}
+
+.hTittle {
+    padding-top: 12px;
+    font-weight: bolder;
+    font-size: 20px;
+    color: white;
+    margin-left: 10px;
+}
+
+h1 {
+    font-size: 21px;
+    font-weight: bold;
+    color: #2D6F28;
+    border-bottom: 2px solid #2D6F28;
+}
+
+h2 {
+    font-size: 18px;
+    color: #2D6F28;
+}
+
+.module {
+    margin-top: 30px;
+}
+
+.spinnerDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
