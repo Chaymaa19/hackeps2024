@@ -43,6 +43,8 @@ dependencies:
   flutter_map_cancellable_tile_provider: ^3.0.2
   flutter_map_geojson: ^1.0.8
   firebase_auth: ^5.3.3
+  firebase_storage: ^12.3.6
+  cloud_firestore: ^5.5.0
 
 dev_dependencies:
   flutter_test:
