@@ -1,15 +1,33 @@
-import {config} from 'dotenv'
+import dotenv from 'dotenv';
+import assert from 'assert';
 
-config()
-//Backend port
-export const PORT = process.env.PORT || 4000
-//Database host address
-export const DB_HOST = process.env.DB_HOST || 'localhost'
-//Database port
-export const DB_PORT = process.env.DB_PORT || 3307
-//Database user
-export const DB_USER = process.env.DB_USER || 'root'
-//Database user password
-export const DB_PASSWORD = process.env.DB_PASSWORD || 'usbw'
-//Database name
-export const DB_DATABASE = process.env.DB_DATABASE || 'happytummy'
+dotenv.config();
+
+const {
+  PORT,
+  HOST,
+  HOST_URL,
+  API_KEY,
+  AUTH_DOMAIN,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+  APP_ID,
+} = process.env;
+
+assert(PORT, 'Port is required');
+assert(HOST, 'Host is required');
+
+export default {
+  port: PORT,
+  host: HOST,
+  hostUrl: HOST_URL,
+  firebaseConfig: {
+    apiKey: API_KEY,
+    authDomain: AUTH_DOMAIN,
+    projectId: PROJECT_ID,
+    storageBucket: STORAGE_BUCKET,
+    messagingSenderId: MESSAGING_SENDER_ID,
+    appId: APP_ID,
+  },
+};
