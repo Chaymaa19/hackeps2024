@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_application_1/config/app_router.dart';
+import 'package:flutter_application_1/config/aut_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -6,6 +10,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
     return Container(
       padding:
           EdgeInsets.symmetric(horizontal: screenWidth * 0.2, vertical: 64.0),
@@ -44,6 +51,7 @@ class LoginPage extends StatelessWidget {
 
           // Email input
           TextField(
+            controller: emailController,
             decoration: InputDecoration(
               labelText: 'Email',
               hintText: 'Enter your email',
@@ -58,6 +66,7 @@ class LoginPage extends StatelessWidget {
 
           // Password input
           TextField(
+            controller: passwordController,
             obscureText: true,
             decoration: InputDecoration(
               labelText: 'Password',
@@ -73,8 +82,36 @@ class LoginPage extends StatelessWidget {
 
           // Login Button
           ElevatedButton(
-            onPressed: () {
-              // TODO: Add your login functionality here
+            onPressed: () async {
+              // Using AuthService to sign in
+              String email = emailController.text.trim();
+              String password = passwordController.text.trim();
+
+              if (email.isEmpty || password.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Please enter both email and password')),
+                );
+                return;
+              }
+
+              UserCredential? userCredential =
+                  await authService.signIn(email, password);
+
+              if (userCredential != null) {
+                // Login successful
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Login successful!')),
+                );
+                context.go("/");
+              } else {
+                // Login failed
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content:
+                          Text('Login failed. Please check your credentials.')),
+                );
+              }
             },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16.0),

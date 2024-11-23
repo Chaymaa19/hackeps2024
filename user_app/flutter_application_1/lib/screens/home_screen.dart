@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isLoggedIn = AuthService.isLoggedIn();
+    bool isLoggedIn = authService.isLoggedIn();
     if (!isLoggedIn) {
       context.go("/login");
     }
