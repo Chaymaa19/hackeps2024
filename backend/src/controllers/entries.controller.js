@@ -1,4 +1,4 @@
-import {pool} from '../db.js'
+//import {pool} from '../db.js'
 
 /**
  * Recovers the entries from the database
