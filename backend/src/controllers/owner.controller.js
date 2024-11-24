@@ -8,6 +8,12 @@ import {
 
 const db = getFirestore(firebase);
 
+/**
+ * Gets all owners from the database
+ * @param {*} req 
+ * @param {*} res 
+ * returns status message
+ */
 export const getOwners = async (req, res) => {
     try {
         const owners = await getDocs(collection(db, 'Owners'));

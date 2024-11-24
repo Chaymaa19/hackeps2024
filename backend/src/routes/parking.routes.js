@@ -11,7 +11,6 @@ router.get('/parkings', getParkings)
 
 router.get('/parkings/:id', getParking)
 
-// get parking by owner
 router.get('/parkings/owner/:owner', getParkingByOwner)
 
 router.get('/parkings/:id/available-spots', getAvailableSpot);

@@ -1,3 +1,6 @@
+/**
+ * Model class for Parking object
+ */
 class Parking {
     constructor(id, name, description, address, coordinates, owner, maxSpots, spots) {
       (this.id = id),

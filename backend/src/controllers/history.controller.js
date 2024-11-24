@@ -13,6 +13,12 @@ import {
 
 const db = getFirestore(firebase);
 
+/**
+ * Creates a new history register
+ * @param {*} req 
+ * @param {*} res 
+ * returns status message
+ */
 export const createHistory = async (req, res) => {
     try {
         const data = req.body;
@@ -23,6 +29,12 @@ export const createHistory = async (req, res) => {
     }
 }
 
+/**
+ * Gets all history registers
+ * @param {*} req 
+ * @param {*} res 
+ * returns status message
+ */
 export const getHistories = async (req, res) => {
     try {
         const histories = await getDocs(collection(db, 'history'));
@@ -47,6 +59,12 @@ export const getHistories = async (req, res) => {
     }
 }
 
+/**
+ * Gets a history register by id
+ * @param {*} req 
+ * @param {*} res 
+ * returns status message
+ */
 export const getHistory = async (req, res) => {
     try {
         const id = req.params.id;
@@ -62,6 +80,12 @@ export const getHistory = async (req, res) => {
     }
 }
 
+/**
+ * Upsates a history register
+ * @param {*} req 
+ * @param {*} res 
+ * returns status message
+ */
 export const updateHistory = async (req, res) => {
     try {
         const id = req.params.id;
@@ -73,6 +97,12 @@ export const updateHistory = async (req, res) => {
     }
 }
 
+/**
+ * Deletes a history register
+ * @param {*} req 
+ * @param {*} res 
+ * returns status message
+ */
 export const deleteHistory = async (req, res) => {
     try {
         const id = req.params.id;

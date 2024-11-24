@@ -1,3 +1,6 @@
+/**
+ * Model class for History object
+ */
 class History {
     constructor(id, idParking, timestamp, numSpots) {
         this.id = id;

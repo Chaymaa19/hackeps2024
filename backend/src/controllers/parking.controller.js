@@ -18,7 +18,7 @@ const db = getFirestore(firebase);
  * @async
  * @param {Request} req 
  * @param {Response} res 
- * @returns {JSON} JSON containg the newly created data
+ * @returns status message
  */
 export const createParking = async (req, res) => {
     try {
@@ -31,11 +31,11 @@ export const createParking = async (req, res) => {
 }
 
 /**
- * Recovers the entries from the database
+ * Recovers the parkings from the database
  * @async
  * @param {Request} req 
  * @param {Response} res 
- * @returns {JSON} JSON containg the recovered data
+ * @returns status message
  */
 export const getParkings = async (req, res) => {
     try {
@@ -66,11 +66,11 @@ export const getParkings = async (req, res) => {
 }
 
 /**
- * Recovers a specific entry from the database
+ * Recovers a specific parking from the database
  * @async
  * @param {Request} req 
  * @param {Response} res 
- * @returns {JSON} JSON containg the recovered data
+ * @returns status message
  */
 export const getParking = async (req, res) => {
     try {
@@ -87,6 +87,12 @@ export const getParking = async (req, res) => {
     }
 }
 
+/**
+ * Gets all parkings by owner
+ * @param {Request} req 
+ * @param {Response} res 
+ * @returns status message
+ */
 export const getParkingByOwner = async (req, res) => {
     try {
         const owner = req.params.owner;
@@ -123,7 +129,7 @@ export const getParkingByOwner = async (req, res) => {
  * @async
  * @param {Request} req 
  * @param {Response} res 
- * @returns {JSON} Json containing the new information
+ * @returns status message
  */
 export const updateParking = async (req, res) => {
     try {
@@ -142,7 +148,7 @@ export const updateParking = async (req, res) => {
  * @async
  * @param {Request} req 
  * @param {Response} res 
- * @returns {CodecState} Code confirming a succsesful operation
+ * @returns status message
  */
 export const deleteParking = async (req, res) => {
     try {
@@ -154,6 +160,12 @@ export const deleteParking = async (req, res) => {
     }
 }
 
+/**
+ * Changes the status of a parking spot
+ * @param {*} req 
+ * @param {*} res 
+ * @returns status message
+ */
 export const toggleSpotStatus = async (req, res) => {
     try {
         const parkingId = req.params.id; // Parking document ID
@@ -192,6 +204,12 @@ export const toggleSpotStatus = async (req, res) => {
     }
 };
 
+/**
+ * Gets a randomly available parking spot
+ * @param {*} req 
+ * @param {*} res 
+ * @returns status message
+ */
 export const getAvailableSpot = async (req, res) => {
     try {
       const parkingId = req.params.id;

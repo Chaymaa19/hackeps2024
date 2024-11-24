@@ -3,7 +3,9 @@ import { getHistories, getHistory, createHistory, updateHistory, deleteHistory }
 
 const router = Router()
 
-
+/**
+ * When one of the histories endpoints is reached, these functions trigger the corresponding function
+ */
 router.get('/histories', getHistories)
 
 router.get('/histories/:id', getHistory)
