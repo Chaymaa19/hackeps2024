@@ -1,37 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/config/constants.dart';
-import 'package:flutter_application_1/config/aut_service.dart';
 import 'package:flutter_application_1/pages/pages.dart';
 import 'package:flutter_application_1/widgets/widgets.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:go_router/go_router.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    bool isLoggedIn = authService.isLoggedIn();
-    if (!isLoggedIn) {
-      context.go("/login");
-    }
-
-    bool mobile =
+   bool mobile =
         MediaQuery.of(context).size.width > maxMobileSize ? false : true;
     if (mobile || !kIsWeb) {
       return Scaffold(
-        appBar: const CustomAppBar(title: "Home"),
+        appBar: const CustomAppBar(title: "Register"),
         drawer: customDrawer(context),
         body: ListView(
-          children: [HomePage()],
+          children: [RegisterPage()],
         ),
       );
     } else {
       return Scaffold(
-          appBar: const CustomAppBar(title: "Home"),
+          resizeToAvoidBottomInset: true,
+          appBar: const CustomAppBar(title: "Register"),
           drawer: customDrawer(context),
-          body: HomePage(),
-      );
+          body: RegisterPage());
     }
   }
 }

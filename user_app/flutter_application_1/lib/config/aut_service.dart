@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_1/config/firebase_logic.dart';
 
 AuthService authService = AuthService();
 
@@ -34,21 +35,29 @@ class AuthService {
     }
   }
 
+  Future<UserCredential?> signUp(String email, String password) async {
+    try {
+      user_credentials =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Add a user entry to Firestore
+      if (user_credentials != null) {
+        await firestoreService.registerUser(user_credentials!.user!.uid, email);
+      }
+
+      return user_credentials;
+    } catch (e) {
+      print("Error signing up: $e");
+      return null;
+    }
+  }
+
   // Example method to sign out
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     user_credentials = null; // Clear the user_credentials when signing out
   }
-}
-
-void main() {
-  // Example usage
-  AuthService authService = AuthService();
-  authService.signIn("test@example.com", "password").then((userCredential) {
-    if (authService.isLoggedIn()) {
-      print("User is logged in!");
-    } else {
-      print("User is not logged in.");
-    }
-  });
 }

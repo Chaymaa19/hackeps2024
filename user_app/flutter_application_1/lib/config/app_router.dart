@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/REGISTER_screen.dart';
 import 'package:flutter_application_1/screens/login_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
@@ -30,6 +31,20 @@ class ApplicationRouter {
                     opacity: CurveTween(curve: Curves.easeInOutCirc)
                         .animate(animation),
                     child: const LoginScreen());
+              }
+              );
+        }),
+    GoRoute(
+      path: '/register',
+      pageBuilder: (BuildContext context, GoRouterState state) {
+          return CustomTransitionPage(
+              child: const RegisterScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                    opacity: CurveTween(curve: Curves.easeInOutCirc)
+                        .animate(animation),
+                    child: const RegisterScreen());
               }
               );
         })

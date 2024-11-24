@@ -27,4 +27,14 @@ class FirebaseService {
       return [];
     }
   }
+
+  Future<void> registerUser(String user_uid, String email) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user_uid) // Use the user's UID as the document ID
+        .set({
+      'email': email,
+      'favorites': [],
+    });
+  }
 }

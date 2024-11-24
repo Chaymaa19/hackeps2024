@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter_application_1/config/app_router.dart';
 import 'package:flutter_application_1/config/aut_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final TextEditingController usernameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
@@ -39,7 +39,7 @@ class LoginPage extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           const Text(
-            'Login',
+            'Register',
             style: TextStyle(
               fontSize: 32.0,
               fontWeight: FontWeight.bold,
@@ -48,6 +48,21 @@ class LoginPage extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 30),
+
+          // Username input
+          TextField(
+            controller: usernameController,
+            decoration: InputDecoration(
+              labelText: 'Username',
+              hintText: 'Enter your username',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              filled: true,
+              fillColor: Colors.grey.shade200,
+            ),
+          ),
+          const SizedBox(height: 16),
 
           // Email input
           TextField(
@@ -80,36 +95,37 @@ class LoginPage extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // Login Button
+          // Register Button
           ElevatedButton(
             onPressed: () async {
-              // Using AuthService to sign in
+              // Collect user inputs
+              String username = usernameController.text.trim();
               String email = emailController.text.trim();
               String password = passwordController.text.trim();
 
-              if (email.isEmpty || password.isEmpty) {
+              if (username.isEmpty || email.isEmpty || password.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                      content: Text('Please enter both email and password')),
+                      content: Text('Please fill in all the fields')),
                 );
                 return;
               }
 
-              UserCredential? userCredential =
-                  await authService.signIn(email, password);
+              try {
+                // Register using AuthService
+                UserCredential? userCredential =
+                    await authService.signUp(email, password);
 
-              if (userCredential != null) {
-                // Login successful
+                // Save username to Firestore or another database if needed
+                if (userCredential != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Registration successful!')),
+                  );
+                  context.go('/');
+                }
+              } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Login successful!')),
-                );
-                context.go("/");
-              } else {
-                // Login failed
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content:
-                          Text('Login failed. Please check your credentials.')),
+                  SnackBar(content: Text('Registration failed: $e')),
                 );
               }
             },
@@ -121,36 +137,19 @@ class LoginPage extends StatelessWidget {
               backgroundColor: Colors.blue,
             ),
             child: const Text(
-              'Log In',
+              'Register',
               style: TextStyle(fontSize: 16),
             ),
           ),
           const SizedBox(height: 16),
 
-          // Google Login Button
-          ElevatedButton.icon(
-            onPressed: () {
-              // TODO: Add Google login functionality here
-            },
-            icon: const Icon(Icons.g_mobiledata),
-            label: const Text('Log in with Google'),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              backgroundColor: Colors.red,
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // Register Text
+          // Back to Login Button
           TextButton(
             onPressed: () {
-              context.go('/register');
+              context.go('/login'); // Go back to LoginPage
             },
             child: const Text(
-              'Don\'t have an account? Register here.',
+              'Already have an account? Log in here.',
               style: TextStyle(
                 color: Colors.blue,
                 fontWeight: FontWeight.bold,
