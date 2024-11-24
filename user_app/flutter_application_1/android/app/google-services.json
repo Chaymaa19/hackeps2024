@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "770345713614",
+    "project_id": "paeria-570f6",
+    "storage_bucket": "paeria-570f6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770345713614:android:370be239209d71d8b8f59f",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDm7PM0k5J5mfgMH5Aa9KGe05zZ2drNjcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
