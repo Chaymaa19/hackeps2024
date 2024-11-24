@@ -1,2 +1,2 @@
-const maxMobileSize = 100;
+const maxMobileSize = 700;
 const appBArHeight = 50.0;
