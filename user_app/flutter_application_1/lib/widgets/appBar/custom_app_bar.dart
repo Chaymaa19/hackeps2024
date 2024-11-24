@@ -62,20 +62,33 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: Image.asset(
                   'assets/images/logopaeria-color.png',
                   width: 65,
-                ), 
+                ),
               ),
               const SizedBox(width: 16),
               Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    widget.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                alignment: Alignment.center,
+                child: Text(
+                  widget.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
-                )
+                ),
+              )
             ]),
+      actions: [
+        Padding(
+          padding:
+              const EdgeInsets.only(right: 16.0), // Add padding to the right
+          child: IconButton(
+            onPressed: () {
+              context.go('/login');
+            },
+            icon: const Icon(Icons.logout),
+            color: Colors.white,
+          ),
+        ),
+      ],
       backgroundColor: Colors.blue,
       elevation: 0,
       centerTitle: false,
