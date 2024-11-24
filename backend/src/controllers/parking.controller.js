@@ -191,4 +191,44 @@ export const toggleSpotStatus = async (req, res) => {
         res.status(400).send(error.message);
     }
 };
+
+export const getAvailableSpot = async (req, res) => {
+    try {
+      const parkingId = req.params.id;
+  
+      // Fetch the parking document
+      const parkingRef = doc(db, 'parkings', parkingId);
+      const parkingSnapshot = await getDoc(parkingRef);
+  
+      if (!parkingSnapshot.exists()) {
+        return res.status(404).send('Parking not found');
+      }
+  
+      // Extract spots array
+      const parkingData = parkingSnapshot.data();
+      const spots = parkingData.spots;
+  
+      // Filter unfilled spots
+      const availableSpots = spots.filter(spot => !spot.filled);
+  
+      if (availableSpots.length === 0) {
+        return res.status(404).send('No available spots found');
+      }
+  
+      // Extract IDs of unfilled spots
+      const availableSpotIds = availableSpots.map(spot => spot.id);
+  
+      // Randomly select one spot
+      const randomSpotId =
+        availableSpotIds[Math.floor(Math.random() * availableSpotIds.length)];
+  
+      res.status(200).send({
+        availableSpotIds,
+        selectedSpotId: randomSpotId,
+      });
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  };
+  
   

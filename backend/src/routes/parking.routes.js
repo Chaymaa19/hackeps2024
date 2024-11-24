@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { getParkings, getParking, getParkingByOwner, createParking, updateParking, toggleSpotStatus, deleteParking } from '../controllers/parking.controller.js'
+import { getParkings, getParking, getParkingByOwner, createParking, updateParking, toggleSpotStatus, getAvailableSpot, deleteParking } from '../controllers/parking.controller.js'
 
 
 const router = Router()
@@ -13,6 +13,8 @@ router.get('/parkings/:id', getParking)
 
 // get parking by owner
 router.get('/parkings/owner/:owner', getParkingByOwner)
+
+router.get('/parkings/:id/available-spots', getAvailableSpot);
 
 router.post('/parkings', createParking)
 
