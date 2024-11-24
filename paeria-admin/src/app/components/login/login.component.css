@@ -1,0 +1,45 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    height: 130px;
+    margin-bottom: 10px;
+}
+
+.body {
+    width: 100%;
+    max-width: 330px;
+    text-align: center;
+}
+
+/* Styling for the Login text */
+.body h1 {
+    color: #007bff; /* Lighter blue color, similar to parking containers */
+    font-size: 24px; /* Adjust size if needed */
+    margin-bottom: 10px; /* Spacing below the header */
+    border-bottom: 2px solid #b3d0ff; /* Lighter blue line under the text */
+    padding-bottom: 5px; /* Optional: Adjust padding to align with the line */
+}
+
+.btn-google {
+    background-color: white;
+    color: #444;
+    width: 100%;
+    font-weight: 500;
+}
+
+.btn-google img {
+    width: 20px;
+    margin-bottom: 4px;
+    margin-right: 14px;
+}
+
+.btn-reg {
+    background-color: #9d9d9d;
+    color: white;
+    width: 100%;
+    font-weight: 500;
+}
