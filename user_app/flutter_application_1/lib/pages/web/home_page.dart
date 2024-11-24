@@ -36,17 +36,26 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _loadUserFavorites() async {
+    Map<String, bool> _favorites = await firestoreService.readUsersFavorites();
+    // Update the state with the markers
+    setState(() {
+      favorites = _favorites;
+    });
+  }
+
   void _toggleFavorite(String parkingId, bool isFavorite) {
     setState(() {
       favorites[parkingId] = isFavorite;
     });
-    // TODO: change firestore user's favorites list 
+    firestoreService.updateUsersFavoriteParkings(favorites);
   }
 
   @override
   void initState() {
     super.initState();
     _loadParkingMarkers();
+    _loadUserFavorites();
   }
 
   @override
@@ -64,7 +73,6 @@ class _HomePageState extends State<HomePage> {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
-
               // Extract parking data from snapshot
               var parkings = snapshot.data!.docs.map((doc) {
                 var data = doc.data() as Map<String, dynamic>;
